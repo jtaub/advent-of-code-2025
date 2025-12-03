@@ -27,7 +27,7 @@ fn parse_range(range: &str) -> (i64, i64) {
 
 /// Returns the sum of all invalid IDs in the given range.
 fn sum_invalid_ids(start: i64, end: i64) -> i64 {
-    (start..=end).filter(|&n| is_invalid(n)).map(|n| n as i64).sum()
+    (start..=end).filter(|&n| is_invalid(n)).sum()
 }
 
 /// Returns true if the given ID is invalid, which in this case means it is formed by concatenating two numbers repeatedly.
