@@ -26,8 +26,6 @@ fn determine_max_voltage(s: String) -> i64 {
     let mut to_remove = s.len() - 12;
     let mut stack: Vec<u32> = Vec::new();
 
-    // Although the problem statement is to read the string from left to right,
-    // the algorithm we'll use will go in reverse.
     for c in s.chars() {
         let num = c.to_digit(10).unwrap();
 
