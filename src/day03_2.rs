@@ -3,7 +3,7 @@ use std::{
     io::{self, BufRead},
 };
 
-pub fn solve_day_three() -> i64 {
+pub fn solve_day_three_part_two() -> i64 {
     solve("/home/jtaubner/RustroverProjects/advent-of-code-2025/src/input/day03.txt")
 }
 
@@ -58,6 +58,6 @@ mod tests {
     #[test]
     fn test_solve_day_three() {
         // this answer is too low
-        assert_eq!(solve_day_three(), 171388730430281);
+        assert_eq!(solve_day_three_part_two(), 171388730430281);
     }
 }
