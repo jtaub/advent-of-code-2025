@@ -67,16 +67,11 @@ fn count_papers(grid: &mut Vec<Vec<char>>) -> i32 {
 }
 
 fn read_file_contents(filename: &str) -> Vec<Vec<char>> {
-    let file = File::open(filename).expect("Failed to open file");
-    let lines = io::BufReader::new(file).lines();
-    let mut grid = Vec::new();
-    for line in lines {
-        let line = line.expect("Failed to read line");
-        let row = line.chars().collect::<Vec<char>>();
-        grid.push(row);
-    }
-
-    grid
+    std::fs::read_to_string(filename)
+        .expect("Failed to read file")
+        .lines()
+        .map(|line| line.chars().collect())
+        .collect()
 }
 
 #[cfg(test)]
