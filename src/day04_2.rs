@@ -38,10 +38,10 @@ fn solve(filename: &str) -> i32 {
     result
 }
 
-fn count_papers(grid: &mut Vec<Vec<char>>) -> i32 {
+fn count_papers(grid: &mut [Vec<char>]) -> i32 {
     let mut result = 0;
     for i in 0..grid.len() {
-        for j in 0..grid[i].len() {
+        for j in 0..grid[0].len() {
             if grid[i][j] != PAPER {
                 continue;
             }
