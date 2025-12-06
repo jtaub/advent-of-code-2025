@@ -1,13 +1,11 @@
-pub fn solve_day_five() -> i32 {
+pub fn solve_day_five_part_two() -> i64 {
     solve("/home/jtaubner/RustroverProjects/advent-of-code-2025/src/input/day05.txt")
 }
 
-fn solve(filename: &str) -> i32 {
-    let binding = std::fs::read_to_string(filename).expect("Failed to read file");
-    let mut lines = binding.lines();
-
-    let mut fresh_ingredient_ranges: Vec<(i64, i64)> = lines
-        .by_ref()
+fn solve(filename: &str) -> i64 {
+    let mut fresh_ingredient_ranges: Vec<(i64, i64)> = std::fs::read_to_string(filename)
+        .expect("Failed to read file")
+        .lines()
         .take_while(|s| !s.is_empty())
         .map(|s| match s.split_once('-') {
             Some((start, end)) => (start.parse::<i64>().unwrap(), end.parse::<i64>().unwrap()),
@@ -17,22 +15,10 @@ fn solve(filename: &str) -> i32 {
 
     fresh_ingredient_ranges.sort_by(|a, b| a.0.cmp(&b.0));
 
-    let merged_ranges = merge_intervals(fresh_ingredient_ranges);
-
-    let available_ingredients: Vec<i64> = lines
-        .map(|s| match s.parse::<i64>() {
-            Ok(num) => num,
-            Err(_) => panic!("Invalid input format {s}"),
-        })
-        .collect();
-
-    let mut result = 0;
-    for id in available_ingredients {
-        if binary_search(&merged_ranges, id) {
-            result += 1;
-        }
-    }
-    result
+    merge_intervals(fresh_ingredient_ranges)
+        .iter()
+        .map(|(start, end)| (end - start) + 1)
+        .sum()
 }
 
 fn merge_intervals(fresh_ingredient_ranges: Vec<(i64, i64)>) -> Vec<(i64, i64)> {
@@ -54,26 +40,6 @@ fn merge_intervals(fresh_ingredient_ranges: Vec<(i64, i64)>) -> Vec<(i64, i64)> 
     sorted_ingredient_ranges
 }
 
-fn binary_search(ranges: &[(i64, i64)], target: i64) -> bool {
-    let mut left = 0;
-    let mut right = ranges.len();
-
-    while left < right {
-        let mid = left + (right - left) / 2;
-        let (start, end) = ranges[mid];
-
-        if start <= target && target <= end {
-            return true;
-        } else if target < start {
-            right = mid;
-        } else {
-            left = mid + 1;
-        }
-    }
-
-    false
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -82,12 +48,12 @@ mod tests {
     fn test_solve_day_five_example() {
         assert_eq!(
             solve("/home/jtaubner/RustroverProjects/advent-of-code-2025/src/input/day05test.txt"),
-            3
+            14
         );
     }
 
     #[test]
     fn test_solve_day_five() {
-        assert_eq!(solve_day_five(), 821);
+        assert_eq!(solve_day_five_part_two(), 344771884978261);
     }
 }
