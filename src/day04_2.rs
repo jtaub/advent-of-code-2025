@@ -80,6 +80,6 @@ mod tests {
 
     #[test]
     fn test_solve_day_four() {
-        assert_eq!(solve_day_four_part_two(), 1478);
+        assert_eq!(solve_day_four_part_two(), 9120);
     }
 }
