@@ -48,57 +48,58 @@ fn read_vertical_ints(s: &str) -> Vec<Vec<u32>> {
         return Vec::new();
     }
 
-    // Pad all lines to same length
+    // Convert to Vec<Vec<u8>> for O(1) column access.
+    // Since we only care about ASCII digits and spaces, bytes work fine.
     let max_len = lines.iter().map(|l| l.len()).max().unwrap_or(0);
-    let padded_lines: Vec<String> = lines
+    let padded_lines: Vec<Vec<u8>> = lines
         .iter()
-        .map(|l| format!("{:width$}", l, width = max_len))
+        .map(|l| {
+            let mut bytes = l.as_bytes().to_vec();
+            bytes.resize(max_len, b' '); // pad with spaces
+            bytes
+        })
         .collect();
 
     // Find column groups by identifying word boundaries
     // A column is part of a word if any row has a digit there
     let in_word: Vec<bool> = (0..max_len)
-        .map(|col| {
-            padded_lines.iter().any(|line| {
-                line.chars()
-                    .nth(col)
-                    .map(|c| c.is_ascii_digit())
-                    .unwrap_or(false)
-            })
-        })
+        .map(|col| padded_lines.iter().any(|line| line[col].is_ascii_digit()))
         .collect();
 
-    // Group consecutive "in_word" columns
-    let mut groups: Vec<Vec<usize>> = Vec::new();
-    let mut current_group: Vec<usize> = Vec::new();
+    // Group consecutive "in_word" columns into (start, end) ranges
+    let mut groups: Vec<(usize, usize)> = Vec::new();
+    let mut start: Option<usize> = None;
     for (col, &is_digit_col) in in_word.iter().enumerate() {
         if is_digit_col {
-            current_group.push(col);
-        } else if !current_group.is_empty() {
-            groups.push(current_group);
-            current_group = Vec::new();
+            if start.is_none() {
+                start = Some(col);
+            }
+        } else if let Some(s) = start {
+            groups.push((s, col));
+            start = None;
         }
     }
-    if !current_group.is_empty() {
-        groups.push(current_group);
+    if let Some(s) = start {
+        groups.push((s, max_len));
     }
 
     // For each group, read each column vertically to form integers
+    // Compute digit values directly instead of building strings
     groups
         .iter()
-        .map(|group| {
-            group
-                .iter()
-                .filter_map(|&col| {
-                    let digits: String = padded_lines
-                        .iter()
-                        .filter_map(|line| line.chars().nth(col).filter(|c| c.is_ascii_digit()))
-                        .collect();
-                    if digits.is_empty() {
-                        None
-                    } else {
-                        digits.parse::<u32>().ok()
+        .map(|&(start, end)| {
+            (start..end)
+                .filter_map(|col| {
+                    let mut value: u32 = 0;
+                    let mut has_digit = false;
+                    for line in &padded_lines {
+                        let byte = line[col];
+                        if byte.is_ascii_digit() {
+                            value = value * 10 + (byte - b'0') as u32;
+                            has_digit = true;
+                        }
                     }
+                    if has_digit { Some(value) } else { None }
                 })
                 .collect()
         })
