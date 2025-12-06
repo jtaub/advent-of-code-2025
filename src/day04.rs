@@ -6,7 +6,7 @@ use std::{
 const PAPER: char = '@';
 
 pub fn solve_day_four() -> i32 {
-    solve("/home/jtaubner/RustroverProjects/advent-of-code-2025/src/input/day04.txt")
+    solve("src/input/day04.txt")
 }
 
 const DIRECTIONS: [(isize, isize); 8] = [
@@ -71,10 +71,7 @@ mod tests {
 
     #[test]
     fn test_solve_day_four_example() {
-        assert_eq!(
-            solve("/home/jtaubner/RustroverProjects/advent-of-code-2025/src/input/day04test.txt"),
-            13
-        );
+        assert_eq!(solve("src/input/day04test.txt"), 13);
     }
 
     #[test]

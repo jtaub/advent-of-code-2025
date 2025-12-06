@@ -1,10 +1,8 @@
 pub fn solve_day_one() -> i32 {
-    solve("/home/jtaubner/RustroverProjects/advent-of-code-2025/src/input/day01.txt")
+    solve("src/input/day01.txt")
 }
 
-fn solve(
-    filename: &str,
-) -> i32 {
+fn solve(filename: &str) -> i32 {
     let (count, _final_pos) = std::fs::read_to_string(filename)
         .unwrap()
         .lines()
@@ -41,7 +39,7 @@ mod tests {
 
     #[test]
     fn test_solve() {
-        assert_eq!(solve("/home/jtaubner/RustroverProjects/advent-of-code-2025/src/input/day01test.txt"), 3);
+        assert_eq!(solve("src/input/day01test.txt"), 3);
     }
 
     #[test]

@@ -1,5 +1,5 @@
 pub fn solve_day_six() -> u64 {
-    solve("/home/jtaubner/IdeaProjects/advent-of-code-2025/src/input/day06.txt")
+    solve("src/input/day06.txt")
 }
 
 fn solve(input: &str) -> u64 {
@@ -44,10 +44,7 @@ mod tests {
 
     #[test]
     fn test_solve_day_six_example() {
-        assert_eq!(
-            solve("/home/jtaubner/IdeaProjects/advent-of-code-2025/src/input/day06test.txt"),
-            4277556
-        );
+        assert_eq!(solve("src/input/day06test.txt"), 4277556);
     }
 
     #[test]
