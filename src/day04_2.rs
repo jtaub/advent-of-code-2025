@@ -1,8 +1,3 @@
-use std::{
-    fs::File,
-    io::{self, BufRead},
-};
-
 const PAPER: char = '@';
 
 pub fn solve_day_four_part_two() -> i32 {
